@@ -1,9 +1,7 @@
 #!/usr/bin/python3
-# Author - Malau Malau Monday
-
-def uppercase(s):
-    for char in s:
-        if ord(char) >= 97 and ord(char) <= 122:
-            char = chr(ord(char) - 32)
-            print(char, end=" ")  # Print horizontally with a space separator
-            print() # Print a new line
+def uppercase(str):
+    for i in str:
+        if ord(i) >= 97 and ord(i) <= 122:
+            i = chr(ord(i) - 32)
+        print("{}".format(i), end="")
+    print()
