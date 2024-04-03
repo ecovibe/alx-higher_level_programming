@@ -1,0 +1,3 @@
+void print_python_list(PyObject *p);
+void print_python_float(PyObject *p);
+void print_python_float(PyObject *p);
