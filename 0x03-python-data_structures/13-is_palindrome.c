@@ -1,91 +1,56 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lists.h"
-
+#include <stddef.h>
 /**
-  * listint_len - Counts the number of elements in a linked list
-  * @h: The linked list to count
-  *
-  * Return: Number of elements in the linked list
-  */
-size_t listint_len(const listint_t *h);
-
-/**
-  * is_palindrome - Checks if a singly linked list is a palindrome
-  * @head: The head of the singly linked list
-  *
-  * Return: 0 if it is not a palindrome, 1 if it is a palindrome
-  */
+ * is_palindrome - check if a list is a palindrome
+ * @head: double pointer to head of list
+ * Return: 1 or 0 depends on the case
+ */
 int is_palindrome(listint_t **head)
 {
-    listint_t *start = NULL, *end = NULL;
-    unsigned int i = 0, len = 0, len_cyc = 0, len_list = 0;
+	listint_t *tortoise = *head, *hare = *head, *prev = *head;
+	listint_t *list_2 = NULL, *mid_list = NULL, *actual, *tmp;
+	int ret = 0;
 
-    if (head == NULL)
-        return (0);
-
-    if (*head == NULL)
-        return (1);
-    
-    start = *head;
-    len = listint_len(start);
-    len_cyc = len * 2;
-    len_list = len_cyc - 2;
-    end = *head;
-
-    for (; i < len_cyc; i = i + 2)
-    {
-        if (start[i].n != end[len_list].n)
-            return (0);
-
-        len_list = len_list - 2;
-    }
-
-    return (1);
+	if (hare == NULL || hare->next == NULL)
+		return (1);
+	while (hare != NULL && hare->next != NULL)
+		hare = hare->next->next, prev = tortoise, tortoise = tortoise->next;
+	if (hare != NULL)
+		mid_list = tortoise, tortoise = tortoise->next;
+	list_2 = tortoise, prev->next = NULL;
+	prev = NULL, actual = list_2;
+	while (actual)
+		tmp = actual->next, actual->next = prev, prev = actual, actual = tmp;
+	list_2 = prev;
+	ret = cmp(*head, list_2);
+	prev = NULL, actual = list_2;
+	while (actual)
+		tmp = actual->next, actual->next = prev, prev = actual, actual = tmp;
+	list_2 = prev;
+	if (mid_list)
+		prev->next = mid_list, mid_list->next = list_2;
+	else
+		prev->next = list_2;
+	return (ret);
 }
-
 /**
-  * get_nodeint_at_index - Gets a node from a linked list
-  * @head: The head of the linked list
-  * @index: The index to find in the linked list
-  *
-  * Return: The specific node of the linked list
-  */
-listint_t *get_nodeint_at_index(listint_t *head, unsigned int index)
+ * cmp - function to compare beginning and end of list
+ * @h1: list from top
+ * @h2: list from bottom
+ * Return: Always zero
+ */
+int cmp(listint_t *h1, listint_t *h2)
 {
-	listint_t *current = head;
-	unsigned int iter_times = 0;
+	listint_t *tmp1 = h1, *tmp2 = h2;
 
-	if (head)
+	while (tmp1 && tmp2)
 	{
-		while (current != NULL)
-		{
-			if (iter_times == index)
-				return (current);
-
-			current = current->next;
-			++iter_times;
-		}
+		if (tmp1->n == tmp2->n)
+			tmp1 = tmp1->next, tmp2 = tmp2->next;
+		else
+			return (0);
 	}
-
-	return (NULL);
-}
-
-/**
-  * listint_len - Counts the number of elements in a linked list
-  * @h: The linked list to count
-  *
-  * Return: Number of elements in the linked list
-  */
-size_t listint_len(const listint_t *h)
-{
-	int length = 0;
-
-	while (h != NULL)
-	{
-		++length;
-		h = h->next;
-	}
-
-	return (length);
+	if (tmp1 == NULL && tmp2 == NULL)
+		return (1);
+	return (0);
 }

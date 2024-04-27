@@ -1,31 +1,23 @@
-#include <stdlib.h>
 #include "lists.h"
-
 /**
- * check_cycle - Checks if a singly-linked list contains a cycle.
- * @list: A singly-linked list.
- *
- * Return: If there is no cycle - 0.
- *         If there is a cycle - 1.
+ * check_cycle - checks if a singly linked list has a cycle in it
+ * @list: pointer to start of linked list
+ * desc: this function says if a list is a circle
+ * Return: 0 in fail 1 in true
  */
 int check_cycle(listint_t *list)
 {
-	listint_t *slow, *fast;
+	listint_t *tortoise = list;
+	listint_t *hare = list;
 
-	if (list == NULL || list->next == NULL)
+	if (list == NULL)
 		return (0);
-
-	slow = list->next;
-	fast = list->next->next;
-
-	while (slow && fast && fast->next)
+	while (tortoise != NULL && hare != NULL && hare->next != NULL)
 	{
-		if (slow == fast)
+		tortoise = tortoise->next;
+		hare = hare->next->next;
+		if (tortoise == hare)
 			return (1);
-
-		slow = slow->next;
-		fast = fast->next->next;
 	}
-
 	return (0);
 }
